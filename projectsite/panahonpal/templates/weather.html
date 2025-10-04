@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PanahonPal</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { margin-bottom: 10px; }
+        form { margin-bottom: 20px; }
+        input[type=text] {
+            padding: 10px; border: none; border-radius: 8px;
+            width: 220px; margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px; border: none; border-radius: 8px;
+            background: #00bcd4; color: white; cursor: pointer;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px; border-radius: 15px;
+            text-align: center; width: 300px;
+        }
+        img { width: 80px; }
+        .error { color: #ffb3b3; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🌤 PanahonPal</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if weather_data %}
+    <div class="card">
+        <h2>{{ weather_data.city }}</h2>
+        <img src="{{ weather_data.icon }}" alt="Weather Icon">
+        <p>🌡 {{ weather_data.temperature }}°C</p>
+        <p>{{ weather_data.condition }}</p>
+        <p>💧 Humidity: {{ weather_data.humidity }}%</p>
+        <p>🌬 Wind: {{ weather_data.wind }} kph</p>
+    </div>
+    {% endif %}
+</body>
+</html>
