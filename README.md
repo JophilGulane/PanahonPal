@@ -1,6 +1,6 @@
 # PanahonPal
 
-**Tagline:** Your friendly campus weather companion
+Your friendly campus weather companion
 
 ---
 
