@@ -12,8 +12,7 @@ PanahonPal is a lightweight, student-first weather app built for Palawan State U
 
 ## Try the APP Here
 * Turn On your Location *
-  !["🌦️ PanahonPal"](https://jophil.pythonanywhere.com/)
-
+## [🌦️ PanahonPal](https://jophil.pythonanywhere.com/)
 
 ## Key Features
 
