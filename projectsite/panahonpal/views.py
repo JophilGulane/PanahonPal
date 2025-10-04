@@ -1,52 +1,46 @@
-from django.shortcuts import render
+
 import requests
+from django.shortcuts import render
+from django.http import JsonResponse
+import datetime
 
 def index(request):
-    weather_data = None
-    error = None
     api_key = "11fd8f356ed74979bd9193958250410"
-    city = None
+    city = request.GET.get("city")
 
-    # Manual search
-    if request.method == "POST":
-        city = request.POST.get("city")
-
-    # Auto-detect on first load
+    # Default: Manila if location not given
     if not city:
-        try:
-            ip_response = requests.get("https://ipapi.co/json/", timeout=5)
-            ip_data = ip_response.json()
-            city = ip_data.get("city", "Manila")  # default fallback
-        except requests.RequestException:
-            city = "Manila"
+        city = "Manila"
 
-    # Fetch weather data from WeatherAPI
-    url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}&aqi=no"
+    # Forecast endpoint: 7 days + hourly
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days=7&aqi=no&alerts=no"
+    response = requests.get(url)
+    data = response.json()
 
-    try:
-        response = requests.get(url, timeout=5)
-        data = response.json()
+    if "error" in data:
+        return render(request, "weather.html", {"error": "City not found."})
 
-        if "error" in data:
-            error = data["error"]["message"]
-        else:
-            current = data['current']
-            location = data['location']
+    current = data["current"]
+    location = data["location"]
+    forecast_days = data["forecast"]["forecastday"]
 
-            weather_data = {
-                "city": f"{location['name']}, {location['country']}",
-                "temperature": current['temp_c'],
-                "humidity": current['humidity'],
-                "wind_speed": current['wind_kph'],
-                "wind_dir": current['wind_dir'],
-                "condition": current['condition']['text'],
-                "icon": current['condition']['icon'],
-                "feelslike": current['feelslike_c']
-            }
-    except requests.RequestException:
-        error = "Unable to connect to WeatherAPI."
+    # Hourly forecast for today
+    hourly_forecast = forecast_days[0]["hour"]
+    now_hour = datetime.datetime.now().hour
+    next_hours = hourly_forecast[now_hour:now_hour+12]  # next 12 hours
 
-    return render(request, "weather.html", {
-        "weather_data": weather_data,
-        "error": error
-    })
+    context = {
+        "city": location["name"],
+        "region": location["region"],
+        "country": location["country"],
+        "temp_c": current["temp_c"],
+        "condition": current["condition"]["text"],
+        "icon": current["condition"]["icon"],
+        "humidity": current["humidity"],
+        "wind_kph": current["wind_kph"],
+        "wind_dir": current["wind_dir"],
+        "forecast_days": forecast_days,
+        "hourly_forecast": next_hours,
+    }
+
+    return render(request, "weather.html", context)
