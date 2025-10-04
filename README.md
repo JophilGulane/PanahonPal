@@ -84,4 +84,4 @@ Project lead: *You can add your name & email here.*
 
 ---
 
-*Generated for Palawan State University — PanahonPal.*
+*Palawan State University — PanahonPal.*
