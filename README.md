@@ -80,7 +80,7 @@ MIT
 
 ## Contact
 
-Project lead: *You can add your name & email here.*
+Project lead: Jophil F. Gulane
 
 ---
 
