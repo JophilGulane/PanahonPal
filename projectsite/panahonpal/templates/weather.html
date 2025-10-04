@@ -27,11 +27,18 @@
         }
         .card {
             background: rgba(255,255,255,0.1);
-            padding: 20px; border-radius: 15px;
-            text-align: center; width: 300px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 320px;
         }
         img { width: 80px; }
         .error { color: #ffb3b3; margin-top: 10px; }
+        .details {
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.6em;
+        }
     </style>
 </head>
 <body>
@@ -51,10 +58,13 @@
     <div class="card">
         <h2>{{ weather_data.city }}</h2>
         <img src="{{ weather_data.icon }}" alt="Weather Icon">
-        <p>🌡 {{ weather_data.temperature }}°C</p>
-        <p>{{ weather_data.condition }}</p>
-        <p>💧 Humidity: {{ weather_data.humidity }}%</p>
-        <p>🌬 Wind: {{ weather_data.wind }} kph</p>
+        <h3>{{ weather_data.condition }}</h3>
+        <h2>🌡 {{ weather_data.temperature }}°C</h2>
+        <p>Feels like: {{ weather_data.feelslike }}°C</p>
+        <div class="details">
+            <p>💧 Humidity: {{ weather_data.humidity }}%</p>
+            <p>🌬 Wind: {{ weather_data.wind_speed }} kph ({{ weather_data.wind_dir }})</p>
+        </div>
     </div>
     {% endif %}
 </body>
